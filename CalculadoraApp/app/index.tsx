@@ -1,12 +1,6 @@
-'import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
-
-// Definição da interface para as propriedades do botão
-interface BotaoProps {
-  titulo: string;
-  corFundo: string;
-  corTexto?: string;
-}
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import Botao from './Botao'; // ← importando o componente separado
 
 export default function Index() {
   // Estados para armazenar a expressão atual e o resultado exibido
@@ -40,13 +34,13 @@ export default function Index() {
     if (valor === 'C') {
       setExpressao('');
       setResultado('0');
-    } 
+    }
     // Botão de Apagar (Backspace)
     else if (valor === '⌫') {
       const novaExpressao = expressao.slice(0, -1);
       setExpressao(novaExpressao);
       setResultado(novaExpressao.length > 0 ? novaExpressao : '0');
-    } 
+    }
     // Botão de Igual (Calcular)
     else if (valor === '=') {
       try {
@@ -59,7 +53,7 @@ export default function Index() {
       } catch (e) {
         setResultado('Erro');
       }
-    } 
+    }
     // Tratamento de Números e Operadores
     else {
       if (operadores.includes(valor)) {
@@ -76,22 +70,12 @@ export default function Index() {
           return;
         }
       }
-      
+
       const novaExpressao = expressao + valor;
       setExpressao(novaExpressao);
       setResultado(novaExpressao);
     }
   };
-
-  // Sub-componente interno para renderizar cada botão individualmente
-  const Botao: React.FC<BotaoProps> = ({ titulo, corFundo = '#333333', corTexto = '#ffffff' }) => (
-    <TouchableOpacity
-      style={[styles.botao, { backgroundColor: corFundo }]}
-      onPress={() => lidarComToque(titulo)}
-    >
-      <Text style={[styles.textoBotao, { color: corTexto }]}>{titulo}</Text>
-    </TouchableOpacity>
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,6 +95,7 @@ export default function Index() {
                 key={botao}
                 titulo={botao}
                 corFundo={obterCorFundo(botao)}
+                onPress={() => lidarComToque(botao)} // ← passando onPress corretamente
               />
             ))}
           </View>
@@ -145,16 +130,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
-  },
-  botao: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textoBotao: {
-    fontSize: 32,
-    fontWeight: '400',
   },
 });
